@@ -70,4 +70,22 @@ public class MemberRepositoryTest {
 
         member2.setUsername("!@#!@#");
     }
+
+    @Test
+    @DisplayName("findByUsernameAndAgeGreaterThan")
+    public void findByUsernameAndAgeGreaterThan() throws Exception {
+        // given
+        Member aaa = new Member("aaa", 10);
+        Member bbb = new Member("aaa", 20);
+        memberRepository.save(aaa);
+        memberRepository.save(bbb);
+
+        // when
+        List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("aaa", 15);
+
+        // then
+        assertThat(result.get(0).getUsername()).isEqualTo("aaa");
+        assertThat(result.get(0).getAge()).isEqualTo(20);
+        assertThat(result.size()).isEqualTo(1);
+    }
 }
