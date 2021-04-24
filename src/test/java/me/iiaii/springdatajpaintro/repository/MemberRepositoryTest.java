@@ -75,12 +75,14 @@ public class MemberRepositoryTest {
     @DisplayName("findByUsernameAndAgeGreaterThan")
     public void findByUsernameAndAgeGreaterThan() throws Exception {
         // given
+        // 이름은 같고 나이는 다른 멤
         Member aaa = new Member("aaa", 10);
         Member bbb = new Member("aaa", 20);
         memberRepository.save(aaa);
         memberRepository.save(bbb);
 
-        // when
+        // when버
+        // 이름은 같고 나이는 age 보다 작은 멤버 조회
         List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("aaa", 15);
 
         // then
