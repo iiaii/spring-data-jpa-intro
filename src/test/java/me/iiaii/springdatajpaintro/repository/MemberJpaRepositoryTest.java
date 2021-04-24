@@ -68,10 +68,9 @@ class MemberJpaRepositoryTest {
 
         long deletedCount = memberJpaRepository.count();
         assertThat(deletedCount).isEqualTo(1);
-
-        member2.setUsername("!@#!@#");
     }
 
+    //
     @Test
     @DisplayName("findByUsernameAndAgeGreaterThan")
     public void findByUsernameAndAgeGreaterThan() throws Exception {
