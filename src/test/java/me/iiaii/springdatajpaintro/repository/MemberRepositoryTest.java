@@ -1,6 +1,8 @@
 package me.iiaii.springdatajpaintro.repository;
 
+import me.iiaii.springdatajpaintro.dto.MemberDto;
 import me.iiaii.springdatajpaintro.entity.Member;
+import me.iiaii.springdatajpaintro.entity.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @Test
     @DisplayName("testMember")
@@ -106,5 +111,41 @@ public class MemberRepositoryTest {
 
         // then
         assertThat(findUser.size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("find username list")
+    public void findUsernameList() throws Exception {
+        // given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // when
+        List<String> usernameList = memberRepository.findUsernameList();
+
+        // then
+        assertThat(usernameList.get(0)).isEqualTo("AAA");
+        assertThat(usernameList.get(1)).isEqualTo("BBB");
+    }
+
+    @Test
+    @DisplayName("findMemberDto")
+    public void findMemberDto() throws Exception {
+        // given
+        Team team = new Team("TeamA");
+        teamRepository.save(team);
+
+        Member m1 = new Member("AAA", 10);
+        m1.setTeam(team);
+        memberRepository.save(m1);
+
+        // when
+        MemberDto memberDto = memberRepository.findMemberDto().get(0);
+
+        // then
+        assertThat(memberDto.getUsername()).isEqualTo("AAA");
+        assertThat(memberDto.getTeamName()).isEqualTo("TeamA");
     }
 }
