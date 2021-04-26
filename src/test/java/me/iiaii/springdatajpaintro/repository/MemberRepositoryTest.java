@@ -14,11 +14,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -31,6 +32,9 @@ public class MemberRepositoryTest {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     @DisplayName("testMember")
@@ -245,5 +249,28 @@ public class MemberRepositoryTest {
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isFalse();
+    }
+
+    @Test
+    @DisplayName("bulkUpdate")
+    public void bulkUpdate() throws Exception {
+        // given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        // 사실 jpql 쿼리를 실행하기 전 이전 영속성 컨텍스트의 내용을 플러시 해서 db에 적용해준다
+
+        // when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        // 벌크 연산은 영속성 컨텍스트에 적용되지 않으므로 데이터 갱신을 위해 비워준다
+//        em.flush();
+//        em.clear();
+
+        // then
+        assertThat(resultCount).isEqualTo(3);
     }
 }
