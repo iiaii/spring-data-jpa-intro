@@ -2,6 +2,8 @@ package me.iiaii.springdatajpaintro.repository;
 
 import me.iiaii.springdatajpaintro.dto.MemberDto;
 import me.iiaii.springdatajpaintro.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,4 +36,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findMemberByUsername(String username); // 단건
 
     Optional<Member> findOptionalByUsername(String username); // 단건 O
+
+    Page<Member> findByAge(int age, Pageable pageable);
 }
