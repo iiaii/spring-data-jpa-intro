@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -165,5 +166,25 @@ public class MemberRepositoryTest {
         // then
         assertThat(names.get(0).getUsername()).isEqualTo("AAA");
         assertThat(names.get(1).getUsername()).isEqualTo("BBB");
+    }
+
+    @Test
+    @DisplayName("returnType")
+    public void returnType() throws Exception {
+        // given
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // when
+        List<Member> result = memberRepository.findListByUsername("AAA");
+        Member result1 = memberRepository.findMemberByUsername("AAA");
+        Optional<Member> result2 = memberRepository.findOptionalByUsername("AAA");  // 결과가 2개 이상이면 exception 발생
+
+        // then
+        assertThat(result.get(0).getUsername()).isEqualTo("AAA");
+        assertThat(result1.getUsername()).isEqualTo("AAA");
+        assertThat(result2.get().getUsername()).isEqualTo("AAA");
     }
 }
