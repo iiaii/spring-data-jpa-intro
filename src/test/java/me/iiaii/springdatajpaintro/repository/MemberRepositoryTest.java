@@ -187,4 +187,6 @@ public class MemberRepositoryTest {
         assertThat(result1.getUsername()).isEqualTo("AAA");
         assertThat(result2.get().getUsername()).isEqualTo("AAA");
     }
+
+
 }
