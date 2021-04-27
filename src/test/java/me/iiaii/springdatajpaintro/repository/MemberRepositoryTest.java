@@ -299,4 +299,41 @@ public class MemberRepositoryTest {
         // then
 
     }
+
+    @Test
+    @DisplayName("queryHint")
+    public void queryHint() throws Exception {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findReadOnlyByUsername(member1.getUsername()); // Dirty Checking (변경감지)가 발생하지 않음
+        findMember.setUsername("member2");
+
+        em.flush();
+
+        // then
+
+    }
+
+    @Test
+    @DisplayName("lock")
+    public void lock() throws Exception {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        List<Member> lockByUsername = memberRepository.findLockByUsername(member1.getUsername());// Dirty Checking (변경감지)가 발생하지 않음
+
+        em.flush();
+
+        // then
+
+    }
 }
