@@ -1,6 +1,7 @@
 package me.iiaii.springdatajpaintro.dto;
 
 import lombok.Data;
+import me.iiaii.springdatajpaintro.entity.Member;
 
 @Data
 public class MemberDto {
@@ -13,5 +14,9 @@ public class MemberDto {
         this.id = id;
         this.username = username;
         this.teamName = teamName;
+    }
+
+    public MemberDto(Member member) {
+        this.username = member.getUsername();
     }
 }
