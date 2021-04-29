@@ -1,13 +1,16 @@
 package me.iiaii.springdatajpaintro.repository;
 
 import me.iiaii.springdatajpaintro.entity.Member;
+import me.iiaii.springdatajpaintro.entity.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,6 +23,9 @@ class MemberJpaRepositoryTest {
 
     @Autowired
     MemberJpaRepository memberJpaRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     @DisplayName("testMember")

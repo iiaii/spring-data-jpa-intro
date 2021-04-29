@@ -7,10 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -348,5 +346,33 @@ public class MemberRepositoryTest {
 
         // then
 
+    }
+
+    @Test
+    @DisplayName("queryByExample")
+    public void queryByExample() throws Exception {
+        // given
+        Team team = new Team("teamA");
+        em.persist(team);
+
+        Member m1 = new Member("m1", 0, team);
+        Member m2 = new Member("m2", 0, team);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        // when
+        Member member = new Member("m1");
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("age");
+
+        Example<Member> example = Example.of(member, matcher);
+        List<Member> result = memberRepository.findAll(example);
+
+        // then
+        assertThat(result.get(0).getUsername()).isEqualTo("m1");
     }
 }
