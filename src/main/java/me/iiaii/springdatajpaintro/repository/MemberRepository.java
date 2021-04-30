@@ -48,7 +48,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
 
-//    @EntityGraph(attributePaths = {"team"}) // 페치 조인 쿼리 없이도 페치 조
+    //    @EntityGraph(attributePaths = {"team"}) // 페치 조인 쿼리 없이도 페치 조
     @Query("select m from Member m left join fetch m.team t")
     List<Member> findMemberFetchJoin();
 
@@ -68,4 +68,13 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     // 동적 projection
     <T> List<T> findDynamicProjectionsByUsername(@Param("username") String username, Class<T> type);
+
+    // 반환 타입이나, 모든 필드를 적어야 해서 안쓰는게 좋다
+    @Query(value = "select * from member where username = ?", nativeQuery = true)
+    Member findByNativeQuery(String username);
+
+    @Query(value = "select m.member_id as id, m.username, t.name as teamName" +
+            "from member m left join team t",
+    countQuery = "select count(*) from member", nativeQuery = true)
+    Page<MemberProjection> findByNativeProjection(Pageable pageable);
 }
