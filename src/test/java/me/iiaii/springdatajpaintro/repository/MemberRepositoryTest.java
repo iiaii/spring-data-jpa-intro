@@ -375,4 +375,119 @@ public class MemberRepositoryTest {
         // then
         assertThat(result.get(0).getUsername()).isEqualTo("m1");
     }
+    
+    @Test
+    @DisplayName("projections")
+    public void projections() throws Exception {
+        // given
+        Team team = new Team("teamA");
+        em.persist(team);
+
+        Member m1 = new Member("m1", 0, team);
+        Member m2 = new Member("m2", 0, team);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+        
+        
+        // when
+        List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
+
+        System.out.println("======================");
+        for (UsernameOnly usernameOnly : result) {
+            System.out.println("usernameOnly = " + usernameOnly.getUsername());
+        }
+
+        // then
+        
+    }
+
+    @Test
+    @DisplayName("projections2")
+    public void projections2() throws Exception {
+        // given
+        Team team = new Team("teamA");
+        em.persist(team);
+
+        Member m1 = new Member("m1", 0, team);
+        Member m2 = new Member("m2", 0, team);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+
+        // when
+        List<UsernameOnlyDto> result = memberRepository.findProjections2ByUsername("m1");
+
+        System.out.println("======================");
+        for (UsernameOnlyDto usernameOnly : result) {
+            System.out.println("usernameOnly = " + usernameOnly.getUsername());
+        }
+
+        // then
+
+    }
+
+    @Test
+    @DisplayName("dynamicProjection")
+    public void dynamicProjection() throws Exception {
+        // given
+        Team team = new Team("teamA");
+        em.persist(team);
+
+        Member m1 = new Member("m1", 0, team);
+        Member m2 = new Member("m2", 0, team);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+
+        // when
+        List<UsernameOnlyDto> result = memberRepository.findDynamicProjectionsByUsername("m1", UsernameOnlyDto.class); // 타입을 넘겨서 동적으로 처리 가능
+
+        System.out.println("======================");
+        for (UsernameOnlyDto usernameOnly : result) {
+            System.out.println("usernameOnly = " + usernameOnly.getUsername());
+        }
+
+        // then
+
+    }
+
+    @Test
+    @DisplayName("closedProjection")
+    public void closedProjection() throws Exception {
+        // given
+        Team team = new Team("teamA");
+        em.persist(team);
+
+        Member m1 = new Member("m1", 0, team);
+        Member m2 = new Member("m2", 0, team);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+
+        // when
+        List<NestedClosedProjections> result = memberRepository.findDynamicProjectionsByUsername("m1", NestedClosedProjections.class); // 타입을 넘겨서 동적으로 처리 가능
+
+        System.out.println("======================");
+        for (NestedClosedProjections usernameOnly : result) {
+            System.out.println("username = " + usernameOnly.getUsername());
+            System.out.println("team name = " + usernameOnly.getTeam().getName());
+        }
+
+        // then
+
+    }
+
+
 }
