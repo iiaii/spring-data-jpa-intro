@@ -73,6 +73,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Query(value = "select * from member where username = ?", nativeQuery = true)
     Member findByNativeQuery(String username);
 
+    // query dsl 사용하여 해결하는 것도 가능
     @Query(value = "select m.member_id as id, m.username, t.name as teamName" +
             "from member m left join team t",
     countQuery = "select count(*) from member", nativeQuery = true)
